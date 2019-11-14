@@ -59,8 +59,13 @@
 
 调整docker部分参数
 
-`echo '{"registry-mirrors":["https://registry.docker-cn.com"],"exec-opts": ["native.cgroupdriver=systemd"]}' > /etc/docker/daemon.json`
-
+    cat <<EOF > /etc/docker/daemon.json
+    {
+      "registry-mirrors":["https://registry.docker-cn.com"],
+      "exec-opts": ["native.cgroupdriver=systemd"]
+    }
+    EOF
+    
 重新启动docker
 
 `systemctl daemon-reload && systemctl restart docker`
@@ -131,7 +136,7 @@
 `kubectl apply -f calico.yaml`
 
 
-## 6.节点加入集群
+## 6.node加入集群
 执行下载镜像脚本
 
     #!/bin/bash
@@ -155,7 +160,7 @@
       docker rmi $ALIYUN_URL/$imageName
     done
     
-执行master打印的加入集群命令，加入集群
+执行初始化master完成后控制台打印的加入集群命令，加入集群
 
     kubeadm join 192.168.0.70:6443 --token v3o2m8.uqvveyu70140wsg8 \
       --discovery-token-ca-cert-hash sha256:03264c87a65c76e292bc904b72d6fa1e057c0a0fdd8aba648ae04c2159ac2266
